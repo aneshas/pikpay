@@ -25,11 +25,20 @@ var transactionTypeText = map[TransactionType]string{
 	Void:          "void",
 }
 
-// TODO - Add omitempty to all fields
 type BuyerProfile struct {
+	CHFullName string `xml:"ch-full-name,omitempty"`
+	CHAddress  string `xml:"ch-address,omitempty"`
+	CHCity     string `xml:"ch-city,omitempty"`
+	CHZip      string `xml:"ch-zip,omitempty"`
+	CHCountry  string `xml:"ch-country"`
+	CHPhone    string `xml:"ch-phone"`
+	CHEmail    string `xml:"ch-email"`
 }
 
 type CardDetails struct {
+	PAN            int `xml:"pan,omitempty"`
+	CVV            int `xml:"cvv,omitempty"`
+	ExpirationDate int `xml:"expiration-date,omitempty"`
 }
 
 type OrderDetails struct {
@@ -39,16 +48,21 @@ type OrderDetails struct {
 	Currency    string `xml:"currency,omitempty"`
 }
 
-type processingData struct {
-	transactionType string `xml:"transaction-type"`
-	digest          string `xml:"digest"`
+type ProcessingData struct {
+	transactionType     string `xml:"transaction-type"`
+	digest              string `xml:"digest"`
+	IP                  string `xml:"ip"`
+	Language            string `xml:"language"`
+	AuthencityToken     string `xml:"authencity-token,omitempty"`
+	NumberOfInstalments int    `xml:"number-of-installments,omitempty"`
+	Moto                string `xml:"moto,omitempty"`
 }
 
 type TransactionData struct {
 	*BuyerProfile
 	*CardDetails
 	*OrderDetails
-	*processingData
+	*ProcessingData
 }
 
 type Transaction struct {

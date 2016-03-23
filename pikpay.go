@@ -75,12 +75,12 @@ func (p *PikPay) NewTransaction(transactionData TransactionData, t TransactionTy
 		// Calculate digest
 	}
 
-	pData := &processingData{
-		transactionType: transactionTypeText[t],
-		digest:          digest,
+	if transactionData.ProcessingData == nil {
+		payload.Transaction.ProcessingData = &ProcessingData{}
 	}
 
-	payload.Transaction.processingData = pData
+	payload.Transaction.ProcessingData.transactionType = transactionTypeText[t]
+	payload.Transaction.ProcessingData.transactionType = digest
 
 	return p.newRequest(payload)
 }
