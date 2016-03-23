@@ -81,6 +81,7 @@ func (p *PikPay) NewTransaction(transactionData TransactionData, t TransactionTy
 
 	payload.Transaction.ProcessingData.transactionType = transactionTypeText[t]
 	payload.Transaction.ProcessingData.transactionType = digest
+	payload.Transaction.ProcessingData.authencityToken = p.apiKey
 
 	return p.newRequest(payload)
 }

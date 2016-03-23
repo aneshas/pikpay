@@ -53,7 +53,7 @@ type ProcessingData struct {
 	digest              string `xml:"digest"`
 	IP                  string `xml:"ip"`
 	Language            string `xml:"language"`
-	AuthencityToken     string `xml:"authencity-token,omitempty"`
+	authencityToken     string `xml:"authencity-token"`
 	NumberOfInstalments int    `xml:"number-of-installments,omitempty"`
 	Moto                string `xml:"moto,omitempty"`
 }
