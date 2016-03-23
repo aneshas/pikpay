@@ -58,6 +58,22 @@ type Transaction struct {
 	pikpay  *PikPay
 }
 
+type ErrorResponse struct {
+	Errors struct {
+		Error []string
+	}
+}
+
+func (e *ErrorResponse) Error() string {
+	errorText := ""
+
+	for _, err := range e.Errors.Error {
+		errorText += fmt.Sprintf("%s\n", err)
+	}
+
+	return errorText
+}
+
 type Response struct {
 	OrderDetails
 	ID              int
@@ -83,12 +99,20 @@ func (r *Transaction) Do() (*Response, error) {
 		Timeout: r.Timeout,
 	}
 
+	r.r.Header.Add("Content-Type", "application/xml")
+
 	resp, err := client.Do(r.r)
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotAcceptable {
+		errResponse := ErrorResponse{}
+		xml.NewDecoder(resp.Body).Decode(&errResponse)
+		return nil, &errResponse
+	}
 
 	responseBody := struct {
 		Transaction Response
@@ -100,8 +124,8 @@ func (r *Transaction) Do() (*Response, error) {
 	}
 
 	switch responseBody.Transaction.Status {
-	case "declined":
-		return nil, NewDeclinedError
+	case "decline":
+		fallthrough
 	case "invalid":
 		return nil, fmt.Errorf(responseText(responseBody.Transaction.ResponseCode))
 	case "approved":

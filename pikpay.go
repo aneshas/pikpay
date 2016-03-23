@@ -20,7 +20,6 @@ var urls = map[Mode]string{
 	ProductionMode: "https://ipgtest.pikpay.ba",
 }
 
-var NewDeclinedError = errors.New("Transaction declined.")
 var NewUnknownError = errors.New("Unknown error occured.")
 
 type PikPay struct {
